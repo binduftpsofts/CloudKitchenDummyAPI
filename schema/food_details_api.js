@@ -248,7 +248,7 @@ const mockFoodDetails = {
 };
 
 // Export for documentation
-console.log("Food Details API Structure:", foodDetailsApi);
-console.log("Mock Data:", mockFoodDetails);
+// console.log("Food Details API Structure:", foodDetailsApi);
+// console.log("Mock Data:", mockFoodDetails);
 
 module.exports = { foodDetailsApi, mockFoodDetails };

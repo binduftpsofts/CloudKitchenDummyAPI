@@ -1,0 +1,219 @@
+<%
+  const apiGroups = [
+    {
+      name: "Authentication Module",
+      routes: [
+        { 
+          method: "POST", path: "/auth/send-otp", desc: "Request a 4-digit OTP via phone", 
+          body: '{\n  "phone": "017XXXXXXXX"\n}',
+          response: '{\n  "success": true,\n  "message": "OTP sent successfully",\n  "data": {\n    "otp": "1234" // Mock only\n  }\n}'
+        },
+        { 
+          method: "POST", path: "/auth/verify-otp", desc: "Verify OTP for session token", 
+          body: '{\n  "phone": "017XXXXXXXX",\n  "otp": "1234"\n}',
+          response: '{\n  "success": true,\n  "message": "OTP verified successfully",\n  "data": {\n    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",\n    "user": {\n      "id": "usr_001",\n      "phone": "017XXXXXXXX"\n    }\n  }\n}'
+        },
+        { 
+          method: "POST", path: "/auth/resend-otp", desc: "Resend expired OTP", 
+          body: '{\n  "phone": "017XXXXXXXX"\n}',
+          response: '{\n  "success": true,\n  "message": "OTP resent successfully"\n}'
+        }
+      ]
+    },
+    {
+      name: "User & Profile",
+      routes: [
+        { 
+          method: "GET", path: "/user/homepage", desc: "Dashboard Data (Detailed layout)", 
+          body: "N/A",
+          response: '{\n  "success": true,\n  "data": {\n    "user": { "id": "usr-001", "name": "John Doe", "location": "Dhaka" },\n    "categories": [{ "id": "cat-001", "name": "All" }, ...],\n    "featured": { "id": "dish-001", "title": "Kachchi Biryani" },\n    "dishes": [{ "id": "dish-002", "name": "Beef Bhuna", "price": 350, ... }]\n  }\n}'
+        },
+        { 
+          method: "GET", path: "/user/home", desc: "Initial Dashboard Data (Banners, categories, featured meals)", 
+          body: "N/A",
+          response: '{\n  "success": true,\n  "data": {\n    "banners": [{ "id": "ban-001", "image": "..." }],\n    "categories": [{ "id": "cat-001", "name": "All" }, ...],\n    "featuredMeals": [{ "id": "meal-001", "name": "Beef Bhuna", "price": 350, ... }]\n  }\n}'
+        },
+        { 
+          method: "GET", path: "/user/profile", desc: "Fetch logged-in user details", 
+          body: "N/A",
+          response: '{\n  "success": true,\n  "data": {\n    "id": "usr_001",\n    "name": "Sabbir",\n    "phone": "+8801XXXXXXXXX",\n    "email": "sabbir@example.com",\n    "addresses": [\n      { "id": "addr_1", "type": "Home", "text": "Dhanmondi, Dhaka" }\n    ],\n    "wallet": { "balance": 2450.5, "currency": "৳" }\n  }\n}'
+        },
+        { 
+          method: "PUT", path: "/user/profile", desc: "Update user profile", 
+          body: '{\n  "name": "Fazle Rabbi",\n  "address": "Dhaka",\n  "email": "fazle@example.com"\n}',
+          response: '{\n  "success": true,\n  "message": "Profile updated successfully",\n  "data": {\n    "id": "usr_001",\n    "name": "Fazle Rabbi",\n    "email": "fazle@example.com"\n  }\n}'
+        }
+      ]
+    },
+    {
+      name: "Meals & Discovery",
+      routes: [
+        { 
+          method: "GET", path: "/user/meals/search", desc: "Search meals by name or ingredients", 
+          body: "Query Params:\n?q=beef",
+          response: '{\n  "success": true,\n  "data": [\n    {\n      "id": "meal-001",\n      "name": "Beef Bhuna",\n      "price": 350,\n      "rating": 4.8,\n      "category": "non-veg",\n      "chef": { "name": "Chef Rahat", "distance": 2.5 }\n    }\n  ]\n}'
+        },
+        { 
+          method: "GET", path: "/user/meals", desc: "Get all available meals with filters", 
+          body: "Query Params:\n?category=non-veg",
+          response: '{\n  "success": true,\n  "data": {\n    "items": [\n      {\n        "id": "meal_001",\n        "name": "Chicken Roast",\n        "price": 420,\n        "rating": 4.7\n      }\n    ],\n    "pagination": {\n      "total": 156,\n      "page": 1,\n      "lastPage": 8\n    }\n  }\n}'
+        },
+        { 
+          method: "GET", path: "/user/meals/:id", desc: "Get detailed meal info, nutrition & chef's story", 
+          body: "N/A",
+          response: '{\n  "success": true,\n  "data": {\n    "id": "meal_001",\n    "name": "Shorshe Beef Bhuna",\n    "description": "Traditional slow-cooked beef...",\n    "price": 450,\n    "nutrition": { "protein": "28g", "carbs": "15g", "fat": "22g" },\n    "chef": {\n      "name": "Anika Rahman",\n      "rating": 4.9,\n      "bio": "Passionate home chef..."\n    }\n  }\n}'
+        }
+      ]
+    },
+    {
+      name: "Orders & Tracking",
+      routes: [
+        { 
+          method: "POST", path: "/user/orders", desc: "Place a new meal order (Checkout)", 
+          body: '{\n  "items": [\n    { "mealId": "123", "quantity": 2 }\n  ],\n  "totalAmount": 450,\n  "deliveryAddress": "Mirpur, Dhaka"\n}',
+          response: '{\n  "success": true,\n  "message": "Order placed successfully",\n  "data": {\n    "orderId": "ORD-987654321",\n    "status": "placed",\n    "estimatedDelivery": "45 mins"\n  }\n}'
+        },
+        { 
+          method: "GET", path: "/user/orders", desc: "Fetch full order history", 
+          body: "N/A",
+          response: '{\n  "success": true,\n  "data": [\n    {\n      "id": "ORD-987654321",\n      "status": "delivered",\n      "totalAmount": 450,\n      "items": 1,\n      "date": "2026-04-20"\n    }\n  ]\n}'
+        },
+        { 
+          method: "GET", path: "/user/orders/:id", desc: "Track live status of a specific order", 
+          body: "N/A",
+          response: '{\n  "success": true,\n  "data": {\n    "id": "ORD-987654321",\n    "status": "preparing",\n    "statusUpdates": [\n      { "status": "placed", "time": "12:00 PM" },\n      { "status": "preparing", "time": "12:15 PM" }\n    ],\n    "items": [\n      { "name": "Shorshe Beef", "quantity": 1, "price": 450 }\n    ],\n    "total": 450\n  }\n}'
+        }
+      ]
+    },
+    {
+      name: "Chef Orders",
+      routes: [
+        { method: "GET", path: "/chef/orders", desc: "Get all current orders for this chef", body: "N/A", response: '{\n  "success": true,\n  "orders": [\n    {\n      "id": "4021",\n      "status": "preparing",\n      "remainingMinutes": 8,\n      "placedTime": "2026-04-27T09:00:00Z",\n      "items": [\n        { "name": "Kacchi Biryani", "quantity": 1 }\n      ]\n    }\n  ]\n}' },
+        { method: "PATCH", path: "/chef/orders/:orderId/accept", desc: "Accept a pending order", body: "N/A", response: '{\n  "success": true,\n  "orderId": "4035",\n  "newStatus": "incoming"\n}' },
+        { method: "PATCH", path: "/chef/orders/:orderId/cancel", desc: "Cancel a pending order", body: "N/A", response: '{\n  "success": true,\n  "orderId": "4035",\n  "newStatus": "cancelled"\n}' },
+        { method: "PATCH", path: "/chef/orders/:orderId/status", desc: "Advance order to next status", body: "N/A", response: '{\n  "success": true,\n  "orderId": "4021",\n  "previousStatus": "preparing",\n  "newStatus": "ready"\n}' },
+        { method: "PATCH", path: "/chef/orders/:orderId/delay", desc: "Add prep time delay", body: '{\n  "additionalMinutes": 5\n}', response: '{\n  "success": true,\n  "orderId": "4021",\n  "newRemainingMinutes": 13\n}' },
+        { method: "POST", path: "/chef/orders/:orderId/verify-handover", desc: "Verify OTP for rider handover", body: '{\n  "otp": "4021"\n}', response: '{\n  "success": true,\n  "orderId": "4021",\n  "newStatus": "onTheWay"\n}' }
+      ]
+    },
+    {
+      name: "Chef Wallet",
+      routes: [
+        { method: "GET", path: "/chef/wallet", desc: "Get wallet balance summary", body: "N/A", response: '{\n  "success": true,\n  "availableBalance": 45200.0,\n  "pendingBalance": 12500.0,\n  "currency": "BDT",\n  "todayEarnings": 620.0\n}' },
+        { method: "GET", path: "/chef/wallet/transactions", desc: "Get transaction history", body: "Query:\n?filter=week", response: '{\n  "success": true,\n  "totalEarnings": 2900.0,\n  "transactions": [\n    {\n      "id": "TXN-001",\n      "amount": 450.0,\n      "type": "processing",\n      "description": "Order Sale"\n    }\n  ]\n}' },
+        { method: "POST", path: "/chef/wallet/withdraw", desc: "Request a withdrawal", body: '{\n  "amount": 5000.0,\n  "method": "bkash",\n  "accountDetails": "01712345678"\n}', response: '{\n  "success": true,\n  "transactionId": "TXN-W1745741600000",\n  "newAvailableBalance": 40200.0,\n  "status": "processing"\n}' }
+      ]
+    },
+    {
+      name: "Chef Recipes",
+      routes: [
+        { method: "GET", path: "/chef/recipes", desc: "Get all recipes for the chef", body: "N/A", response: '{\n  "success": true,\n  "recipes": [\n    {\n      "id": "r1",\n      "name": "Kacchi Biryani",\n      "price": 450.0,\n      "status": "approved"\n    }\n  ]\n}' },
+        { method: "POST", path: "/chef/recipes", desc: "Add a new recipe (pending status)", body: '{\n  "name": "Grilled Salmon",\n  "price": 1250.0,\n  "preparationTime": 25\n}', response: '{\n  "success": true,\n  "recipe": {\n    "id": "r8",\n    "name": "Grilled Salmon",\n    "status": "pending"\n  }\n}' },
+        { method: "PUT", path: "/chef/recipes/:recipeId", desc: "Update an existing recipe", body: '{\n  "price": 1300.0\n}', response: '{\n  "success": true,\n  "recipe": { /* updated */ }\n}' },
+        { method: "DELETE", path: "/chef/recipes/:recipeId", desc: "Delete a recipe", body: "N/A", response: '{\n  "success": true,\n  "message": "Recipe deleted successfully"\n}' }
+      ]
+    },
+    {
+      name: "Chef Reviews",
+      routes: [
+        { method: "GET", path: "/chef/reviews", desc: "Get customer reviews", body: "N/A", response: '{\n  "success": true,\n  "averageRating": 4.5,\n  "reviews": [\n    {\n      "id": "REV-001",\n      "rating": 5.0,\n      "comment": "Absolutely delicious!"\n    }\n  ]\n}' },
+        { method: "POST", path: "/chef/reviews/:reviewId/reply", desc: "Reply to customer review", body: '{\n  "reply": "Thank you!"\n}', response: '{\n  "success": true,\n  "replyDate": "2026-04-27T10:00:00Z"\n}' },
+        { method: "GET", path: "/chef/reviews/unrated-riders", desc: "Get delivered orders needing rider ratings", body: "N/A", response: '{\n  "success": true,\n  "unratedOrders": [\n    {\n      "orderId": "4025",\n      "riderName": "Kamal Hossain"\n    }\n  ]\n}' },
+        { method: "POST", path: "/chef/reviews/rate-rider", desc: "Submit a rating for a rider", body: '{\n  "orderId": "4025",\n  "rating": 4.5,\n  "comment": "Very punctual"\n}', response: '{\n  "success": true,\n  "message": "Rider rated successfully"\n}' }
+      ]
+    },
+    {
+      name: "Chef Live Stream",
+      routes: [
+        { method: "POST", path: "/chef/livestream/start", desc: "Start live cooking stream", body: '{\n  "orderId": "4021"\n}', response: '{\n  "success": true,\n  "streamId": "stream-abc123",\n  "currentStep": "Preparing Ingredients"\n}' },
+        { method: "POST", path: "/chef/livestream/stop", desc: "Stop live stream", body: "N/A", response: '{\n  "success": true,\n  "message": "Stream ended"\n}' },
+        { method: "PATCH", path: "/chef/livestream/step", desc: "Update current cooking step", body: '{\n  "step": "Heating Oil & Spices"\n}', response: '{\n  "success": true,\n  "currentStep": "Heating Oil & Spices"\n}' },
+        { method: "GET", path: "/chef/livestream/status", desc: "Get current stream status", body: "N/A", response: '{\n  "success": true,\n  "isStreaming": true,\n  "viewerCount": 12\n}' }
+      ]
+    },
+    {
+      name: "Chef Profile",
+      routes: [
+        { method: "GET", path: "/chef/profile", desc: "Get chef profile info", body: "N/A", response: '{\n  "success": true,\n  "profile": {\n    "name": "Chef Farhana",\n    "phone": "01712345678"\n  }\n}' },
+        { method: "PATCH", path: "/chef/profile", desc: "Update profile name/email", body: '{\n  "name": "Chef Farhana Khan"\n}', response: '{\n  "success": true,\n  "profile": { /* updated */ }\n}' },
+        { method: "POST", path: "/chef/profile/avatar", desc: "Upload a new profile photo", body: "FormData: { avatar: file }", response: '{\n  "success": true,\n  "profileImageUrl": "https://..."\n}' }
+      ]
+    }
+  ];
+
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeChef API v<%= config.api.version %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #e67e22; --dark: #2c3e50; --bg: #f8f9fa; --border: #eaedf1; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #333; margin: 0; display: flex; }
+        .sidebar { width: 300px; background: white; height: 100vh; position: fixed; border-right: 1px solid var(--border); padding: 20px; overflow-y: auto; box-sizing: border-box; }
+        .main { margin-left: 300px; padding: 40px; flex: 1; box-sizing: border-box; }
+        .badge { padding: 4px 8px; border-radius: 4px; color: white; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+        .GET { background: #3498db; } .POST { background: #27ae60; } .PUT { background: #f39c12; } .DELETE { background: #e74c3c; } .PATCH{ background: #f39c00}
+        .route-card { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+        .route-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        code { background: #f1f3f5; padding: 4px 8px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 14px; color: #e83e8c; }
+        pre { background: #2d3436; color: #f8f9fa; padding: 15px; border-radius: 6px; font-size: 13px; overflow-x: auto; margin-top: 5px; margin-bottom: 15px; }
+        h1 { color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-top: 0; }
+        .group-title { margin-top: 40px; color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        a { color: var(--primary); text-decoration: none; font-weight: 500; }
+        a:hover { text-decoration: underline; }
+        ul { list-style: none; padding: 0; }
+        li { margin-bottom: 10px; }
+        .section-label { margin-bottom: 5px; font-weight: 600; font-size: 14px; color: var(--dark); }
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 900px) { .grid-container { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>🍳 HomeChef API</h3>
+        <p>Version: <%= config.api.version %></p>
+        <hr>
+        <ul>
+            <% apiGroups.forEach(function(g) { %>
+                <li><a href="#<%= g.name.replace(/[^a-zA-Z0-9]/g, '') %>"><%= g.name %></a></li>
+            <% }); %>
+        </ul>
+    </div>
+    <div class="main">
+        <h1>🍳 HomeChef Cloud API Reference</h1>
+        <p>Base URL: <code><%= baseUrl %></code></p>
+
+        <% apiGroups.forEach(function(group) { %>
+            <h2 id="<%= group.name.replace(/[^a-zA-Z0-9]/g, '') %>" class="group-title"><%= group.name %></h2>
+            <% group.routes.forEach(function(r) { %>
+                <div class="route-card">
+                    <div class="route-header">
+                        <span class="badge <%= r.method %>"><%= r.method %></span>
+                        <code><%= r.path %></code>
+                    </div>
+                    <p style="color: #666; margin: 15px 0;"><%= r.desc %></p>
+                    
+                    <div class="grid-container">
+                        <% if (r.body !== 'N/A') { %>
+                            <div>
+                                <p class="section-label">Request Details / Payload:</p>
+                                <pre><%= r.body %></pre>
+                            </div>
+                        <% } %>
+                        
+                        <% if (r.response) { %>
+                            <div <% if (r.body === 'N/A') { %> style="grid-column: 1 / -1;" <% } %>>
+                                <p class="section-label">Example Response:</p>
+                                <pre><%= r.response %></pre>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            <% }); %>
+        <% }); %>
+    </div>
+</body>
+</html>
