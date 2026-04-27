@@ -46,7 +46,7 @@ app.get('/api/v1', (req, res) => {
       </head>
       <body>
         <h1>HomeChef Cloud API Documentation</h1>
-        <p><strong>Base URL:</strong> <code>https://api.homechef.cloud/api/v1</code></p>
+        <p><strong>Base URL:</strong> <code>https://cloud-kitchen-dummy-api.vercel.app/api/v1</code></p>
 
         <h2>1. Authentication Module</h2>
         <table>
