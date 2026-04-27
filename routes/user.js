@@ -58,7 +58,7 @@ router.get('/wallet', (req, res) => {
 });
 
 // POST /api/v1/user/complaints
-const supportApi = require('../../support_api');
+const supportApi = require('../schema/support_api.js');
 router.post('/complaints', (req, res) => {
   res.status(200).json(supportApi.response);
 });
