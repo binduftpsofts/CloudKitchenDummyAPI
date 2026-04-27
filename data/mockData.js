@@ -1,13 +1,13 @@
 // Consolidated Mock Data for HomeChef API
 
-const foodDetails = require('../../food_details_api').mockFoodDetails || {};
-const foodDetailsResponse = require('../../food_details_api').foodDetailsApi || {};
-const homepageData = require('../../homepage_data').homepageApiStructure?.sampleResponse || {};
-const mealSearchApi = require('../../meal_search_api').sampleResults || {};
-const mealsApi = require('../../meals_api').response || {};
-const homeApi = require('../../home_api').response || {};
-const ordersApi = require('../../orders_api') || {};
-const profileApi = require('../../profile_api') || {};
+const foodDetails = require('../schema/food_details_api.js').mockFoodDetails || {};
+const foodDetailsResponse = require('../schema/food_details_api.js').foodDetailsApi || {};
+const homepageData = require('../schema/homepage_data.js').homepageApiStructure?.sampleResponse || {};
+const mealSearchApi = require('../schema/meal_search_api.js').sampleResults || {};
+const mealsApi = require('../schema/meals_api.js').response || {};
+const homeApi = require('../schema/home_api.js').response || {};
+const ordersApi = require('../schema/orders_api.js') || {};
+const profileApi = require('../schema/profile_api.js') || {};
 
 // Mock Data Objects directly from the files to ensure we have them
 const mockMeals = [
