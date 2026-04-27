@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mockData = require('../data/mockData');
+const mockData = require('../data/mockData.js');
 
 // POST /api/v1/user/orders (Checkout)
 router.post('/', (req, res) => {

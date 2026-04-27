@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mockData = require('../data/mockData');
+const mockData = require('../data/mockData.js');
 
 // GET /api/v1/user/homepage (Dashboard Data - Detailed)
 router.get('/homepage', (req, res) => {

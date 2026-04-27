@@ -119,7 +119,12 @@ app.get('/api/v1', (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`Base URL: http://localhost:${PORT}/api/v1`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    console.log(`Base URL: http://localhost:${PORT}/api/v1`);
+  });
+}
+
+// Export app for Vercel serverless functions
+module.exports = app;
