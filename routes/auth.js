@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Mock Auth API responses
-const authApi = require('../../auth_api');
+const authApi = require('../shcema/auth_api');
 
 // POST /api/v1/auth/send-otp
 router.post('/send-otp', (req, res) => {
