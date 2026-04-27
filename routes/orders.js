@@ -1,20 +1,19 @@
+/**
+ * Orders Routes
+ * Handles order placement, history, and tracking
+ */
+
 const express = require('express');
 const router = express.Router();
-const mockData = require('../data/mockData.js');
+const ordersController = require('../controllers/orders.controller');
 
-// POST /api/v1/user/orders (Checkout)
-router.post('/', (req, res) => {
-  res.status(200).json(mockData.ordersApi.placeOrder.response);
-});
+// POST /api/v1/user/orders - Place new order (Checkout)
+router.post('/', ordersController.createOrder);
 
-// GET /api/v1/user/orders (Order History)
-router.get('/', (req, res) => {
-  res.status(200).json(mockData.ordersApi.getOrderHistory.response);
-});
+// GET /api/v1/user/orders - Get order history
+router.get('/', ordersController.getOrderHistory);
 
-// GET /api/v1/user/orders/:id (Track Order)
-router.get('/:id', (req, res) => {
-  res.status(200).json(mockData.ordersApi.trackOrder.response);
-});
+// GET /api/v1/user/orders/:id - Track specific order
+router.get('/:id', ordersController.trackOrder);
 
 module.exports = router;

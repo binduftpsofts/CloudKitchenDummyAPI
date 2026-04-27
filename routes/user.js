@@ -1,66 +1,31 @@
+/**
+ * User Routes
+ * Includes meals, profiles, and user-related endpoints
+ */
+
 const express = require('express');
 const router = express.Router();
-const mockData = require('../data/mockData.js');
+const userController = require('../controllers/user.controller');
 
-// GET /api/v1/user/homepage (Dashboard Data - Detailed)
-router.get('/homepage', (req, res) => {
-  res.status(200).json(mockData.homepageData);
-});
+// GET /api/v1/user/homepage - Dashboard Data (Detailed)
+router.get('/homepage', userController.getHomepage);
 
-// GET /api/v1/user/home (Initial Dashboard Data - Alternative)
-router.get('/home', (req, res) => {
-  res.status(200).json(mockData.homeApi);
-});
+// GET /api/v1/user/home - Initial Dashboard Data
+router.get('/home', userController.getHome);
 
-// GET /api/v1/user/meals/search
-router.get('/meals/search', (req, res) => {
-  // Use query parameters if needed: req.query
-  res.status(200).json(mockData.mealSearchApi);
-});
+// GET /api/v1/user/meals/search - Search meals
+router.get('/meals/search', userController.searchMeals);
 
-// GET /api/v1/user/meals
-router.get('/meals', (req, res) => {
-  res.status(200).json(mockData.mealsApi);
-});
+// GET /api/v1/user/meals - List all meals
+router.get('/meals', userController.getAllMeals);
 
-// GET /api/v1/user/meals/:id
-router.get('/meals/:id', (req, res) => {
-  const { id } = req.params;
-  
-  // Try to find the exact meal in our mock array
-  const meal = mockData.mockMeals.find(m => m.id === id);
-  
-  if (meal) {
-    // Wrap in standard response structure
-    res.status(200).json({
-      success: true,
-      data: meal
-    });
-  } else {
-    // If not found, just return the first mock food details to simulate success for any ID
-    res.status(200).json(mockData.foodDetailsResponse.response);
-  }
-});
+// GET /api/v1/user/meals/:id - Get single meal by ID
+router.get('/meals/:id', userController.getMealById);
 
-// GET /api/v1/user/profile
-router.get('/profile', (req, res) => {
-  res.status(200).json(mockData.profileApi.getProfile.response);
-});
+// GET /api/v1/user/profile - Get user profile
+router.get('/profile', userController.getProfile);
 
-// PUT /api/v1/user/profile
-router.put('/profile', (req, res) => {
-  res.status(200).json(mockData.profileApi.updateProfile.response);
-});
-
-// GET /api/v1/user/wallet
-router.get('/wallet', (req, res) => {
-  res.status(200).json(mockData.profileApi.getWallet.response);
-});
-
-// POST /api/v1/user/complaints
-const supportApi = require('../schema/support_api.js');
-router.post('/complaints', (req, res) => {
-  res.status(200).json(supportApi.response);
-});
+// PUT /api/v1/user/profile - Update user profile
+router.put('/profile', userController.updateProfile);
 
 module.exports = router;

@@ -74,6 +74,11 @@ Access the API documentation at:
 - Root: `http://localhost:5000/`
 - API Docs: `http://localhost:5000/api/v1`
 
+Deployed to vercel
+- Root: `https://cloud-kitchen-dummy-api.vercel.app`
+- API Docs: `https://cloud-kitchen-dummy-api.vercel.app/api/v1`
+
+
 ### Available Endpoints
 
 #### Authentication (`/api/v1/auth`)
