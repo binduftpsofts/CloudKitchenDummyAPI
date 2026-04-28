@@ -93,6 +93,8 @@ Deployed to vercel
 - `GET /meals/:id` - Get meal details
 - `GET /meals/search` - Search meals
 - `GET /profile` - Get user profile
+- `GET /chefs` - List all available chefs
+- `GET /chefs/:id` - Get chef details
 
 #### Orders (`/api/v1/user/orders`)
 - `POST /` - Place new order

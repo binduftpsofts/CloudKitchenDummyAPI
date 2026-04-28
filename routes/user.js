@@ -25,6 +25,12 @@ router.get('/meals/:id', userController.getMealById);
 // GET /api/v1/user/profile - Get user profile
 router.get('/profile', userController.getProfile);
 
+// GET /api/v1/user/chefs - List all chefs
+router.get('/chefs', userController.getChefs);
+
+// GET /api/v1/user/chefs/:id - Get chef details
+router.get('/chefs/:id', userController.getChefById);
+
 // PUT /api/v1/user/profile - Update user profile
 router.put('/profile', userController.updateProfile);
 

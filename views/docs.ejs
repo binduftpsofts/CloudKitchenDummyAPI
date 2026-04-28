@@ -66,6 +66,21 @@
       ]
     },
     {
+      name: "Chef Discovery",
+      routes: [
+        { 
+          method: "GET", path: "/user/chefs", desc: "List of all available chefs with their profiles", 
+          body: "N/A",
+          response: '{\n  "success": true,\n  "data": {\n    "chefs": [\n      {\n        "chefId": "CHEF-001",\n        "name": "Chef Anika Rahman",\n        "specialty": "Traditional Bengali Cuisine",\n        "rating": 4.8,\n        "isVerified": true,\n        "isOnline": true\n      }\n    ]\n  }\n}'
+        },
+        { 
+          method: "GET", path: "/user/chefs/:id", desc: "Public profile of a chef including their active meals", 
+          body: "N/A",
+          response: '{\n  "success": true,\n  "data": {\n    "chef": {\n      "chefId": "CHEF-001",\n      "name": "Chef Anika Rahman",\n      "bio": "Passionate about authentic Bengali flavors...",\n      "activeMeals": [\n        { "id": "meal-001", "name": "Kachchi Biryani", "price": 450 }\n      ]\n    }\n  }\n}'
+        }
+      ]
+    },
+    {
       name: "Orders & Tracking",
       routes: [
         { 

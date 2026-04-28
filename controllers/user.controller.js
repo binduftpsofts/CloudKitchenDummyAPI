@@ -4,6 +4,7 @@
  */
 
 const mockData = require('../data/mockData');
+const { chefsApi, chefDetailsApi } = require('../chefs_api');
 const { sendSuccess, sendError } = require('../utils/response.util');
 
 /**
@@ -115,6 +116,38 @@ const updateProfile = (req, res) => {
   }
 };
 
+/**
+ * Get all chefs
+ * GET /api/v1/user/chefs
+ */
+const getChefs = (req, res) => {
+  try {
+    sendSuccess(res, chefsApi.response.data, 'Chefs retrieved successfully', 200);
+  } catch (error) {
+    sendError(res, 'Failed to fetch chefs', 500, error);
+  }
+};
+
+/**
+ * Get single chef by ID
+ * GET /api/v1/user/chefs/:id
+ */
+const getChefById = (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // In a real app, we would search for the chef by id. 
+    // Here we just return the mock detail, but we can customize the ID in the response if needed.
+    const responseData = JSON.parse(JSON.stringify(chefDetailsApi.response.data));
+    responseData.chef.id = id;
+    responseData.chef.chefId = id;
+    
+    sendSuccess(res, responseData, 'Chef details retrieved successfully', 200);
+  } catch (error) {
+    sendError(res, 'Failed to fetch chef details', 500, error);
+  }
+};
+
 module.exports = {
   getHomepage,
   getHome,
@@ -123,4 +156,6 @@ module.exports = {
   getMealById,
   getProfile,
   updateProfile,
+  getChefs,
+  getChefById,
 };
